@@ -1,10 +1,4 @@
-package Starter;
-
-import Nenchev_s0566298_Kontoverwaltung.Adresse;
-import Nenchev_s0566298_Kontoverwaltung.Anrede;
-import Nenchev_s0566298_Kontoverwaltung.Bank;
-import Nenchev_s0566298_Kontoverwaltung.Konto;
-import Nenchev_s0566298_Kontoverwaltung.Kunden;
+package Nenchev_s0566298_Kontoverwaltung;
 
 /**
  * 
