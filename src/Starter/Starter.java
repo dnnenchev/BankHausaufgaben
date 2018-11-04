@@ -1,71 +1,214 @@
 package Starter;
 
+import java.util.Scanner;
+
 import Nenchev_s0566298_Kontoverwaltung.Adresse;
 import Nenchev_s0566298_Kontoverwaltung.Anrede;
 import Nenchev_s0566298_Kontoverwaltung.Bank;
+import Nenchev_s0566298_Kontoverwaltung.GeschaeftsKunden;
 import Nenchev_s0566298_Kontoverwaltung.Konto;
 import Nenchev_s0566298_Kontoverwaltung.Kunden;
+import Nenchev_s0566298_Kontoverwaltung.PrivatKunden;
 
 /**
  * 
- * @author Damyan Nenchev ,Matrikelnummer: S0566298, E-Mail
- *         s0566298@htw-berlin.de
+ * @author Damyan Nenchev ,Matrikelnummer: S0566298, <s0566298@htw-berlin.de>
  *
  */
 public class Starter {
 
+	private static Bank bank;
+
+	private static Scanner scan;
+
 	public static void main(String[] args) {
+
+		scan = new Scanner(System.in);
+
 		/**
 		 * Angaben der Bank
 		 */
-		Bank bankdaten = new Bank("Post Bank", 10010010, "PBNKDEFF", "An der Eule 5");
+		bank = new Bank("Post Bank", 10010010, "PBNKDEFF", "An der Eule 5");
 		Adresse adresse = new Adresse(105732, "Deutschland : Berlin");
 
-		Kunden kundendaten1 = new Kunden(566298, "Tomas", "Mueler", "19.12.1995", "Friedrichsgracht 57", 1765432177,
-				"tomas@gmail.com");
-		Kunden kundendaten2 = new Kunden(385412, "Yana", "Hagel", "03.02.1972", "Friesweg 4", 178105532,
-				"yana.hagel@gmx.de");
-		Kunden kundendaten3 = new Kunden(249310, "Maria", "Obuslavski", "13.06.1958", "Am Planetarium 7", 1759112778,
-				"russiangirl@gmail.com");
-		Kunden kundendaten4 = new Kunden(321123, "Helmut", "Flicker", "17.11.1990", "Strochstraße 51", 1769338157,
-				"flicker_29@gmail.com");
-		Kunden kundendaten5 = new Kunden(614888, "Charls", "Heminguey", "23.03.1983", "Felixstraße 69", 1767753326,
-				"ch_heming@gmail.com");
-
-		kundendaten1.setAnrede(Anrede.Herr);
-		kundendaten2.setAnrede(Anrede.Frau);
-		kundendaten3.setAnrede(Anrede.Frau);
-		kundendaten4.setAnrede(Anrede.Herr);
-		kundendaten5.setAnrede(Anrede.Herr);
+		int option = -1;
 		/**
-		 * jeweils 0 bis 3 Konten hinfuegen
+		 * Falsche Option ausgewählt aus der Menü
 		 */
-		kundendaten1.addKonto(new Konto("DE57 1160 1688 8800 5521 00", 1.500));
-		kundendaten1.addKonto(new Konto("DE40 2931 2341 4320 7891 00", 35.500));
-		kundendaten1.addKonto(new Konto("DE00 1234 3321 7189 4789 00", 2.356));
+		do {
+			showMenu();
 
-		kundendaten2.addKonto(new Konto("DE15 7162 7823 4319 9921 00", 23.319));
+			option = Integer.parseInt(scan.nextLine());
 
-		kundendaten3.addKonto(new Konto("DE11 1289 2572 0134 9311 00", 2.839));
-		kundendaten3.addKonto(new Konto("DE05 0032 5661 9333 9512 00", 5.451));
+			if (option < 1 || option > 7) {
+				System.out.println("\nInvalid option\n");
+			} else {
+				handleOption(option);
+			}
+		} while (option != 7);
 
-		kundendaten4.addKonto(new Konto("DE02 9677 8311 0504 3181 00", 7.500));
+	}
 
-		kundendaten5.addKonto(new Konto("DE88 3197 0666 5781 8954 00", 0.750));
-		kundendaten5.addKonto(new Konto("DE78 2177 9876 1289 8732 00", 45.800));
-		/**
-		 * 5 Kunden hinfuegen
-		 */
-		bankdaten.addKunden(kundendaten1);
-		bankdaten.addKunden(kundendaten2);
-		bankdaten.addKunden(kundendaten3);
-		bankdaten.addKunden(kundendaten4);
-		bankdaten.addKunden(kundendaten5);
-		/**
-		 * Ausgabe
-		 */
-		System.out.print(bankdaten);
+	/**
+	 * Start Menü
+	 */
+	private static void showMenu() {
+		System.out.println("1. Privatkunde anlegen");
+		System.out.println("2. Geschäftskunde anlegen");
+		System.out.println("3. Konto anlegen und Kundennummer zuordnen");
+		System.out.println("4. Kunde mit Konten anzeigen (Auswahl durch)");
+		System.out.println("5. Kunde mit Konten anzeigen (Auswahl durch Name)");
+		System.out.println("6. Konto anzeigen (Auswahl durch IBAN)");
+		System.out.println("7. Beenden");
+	}
 
+	/**
+	 * 
+	 * @param Option
+	 */
+	private static void handleOption(int option) {
+		switch (option) {
+		case 1: {
+			addPrivatKunde();
+		}
+		case 2: {
+			addFirmenKunde();
+		}
+		case 3: {
+			addKontoAndSort();
+		}
+		case 4: {
+			kundeByNummer();
+		}
+		case 5: {
+			kundeByName();
+		}
+		case 6: {
+			kontoByIban();
+		}
+		}
+	}
+
+	/**
+	 * Privatkunde hinzufügen erste Option aus der Menü
+	 */
+	private static void addPrivatKunde() {
+		int kundenNummer = Integer.parseInt(scan.nextLine());
+		String vorname = scan.nextLine();
+		String nachname = scan.nextLine();
+		String geburdstadum = scan.nextLine();
+		String addresse = scan.nextLine();
+		long telefon = Long.parseLong(scan.nextLine());
+		String email = scan.nextLine();
+		Anrede anrede = Integer.parseInt(scan.nextLine()) == 0 ? Anrede.Herr : Anrede.Frau;
+
+		bank.addKunden(
+				new PrivatKunden(kundenNummer, vorname, nachname, geburdstadum, addresse, telefon, email, anrede));
+	}
+
+	/**
+	 * Geschäftskunden hinzufügen
+	 */
+	private static void addFirmenKunde() {
+		// kato dobavqne na private kunde, samo che obekta ot tip class
+		// new GeschaeftsKunden
+		int kundenNummer = Integer.parseInt(scan.nextLine());
+		String firmenName = scan.nextLine();
+		String geburdstadum = scan.nextLine();
+		String addresse = scan.nextLine();
+		long telefon = Long.parseLong(scan.nextLine());
+		String email = scan.nextLine();
+
+		bank.addKunden(new GeschaeftsKunden(kundenNummer, firmenName, geburdstadum, addresse, telefon, email));
+	}
+
+	/**
+	 * dritte Option aus der Menü
+	 */
+	private static void addKontoAndSort() {
+		int nummer = Integer.parseInt(scan.nextLine());
+
+		Kunden kunde = null;
+
+		for (Kunden kunden : bank.getKundeList()) {
+			if (kunden.getKundenummer() == nummer) {
+				kunde = kunden;
+				break;
+			}
+		}
+
+		if (kunde != null) {
+			kunde.addKonto(new Konto(scan.nextLine(), Double.parseDouble(scan.nextLine())));
+			kunde.sortKontos();
+		}
+	}
+
+	/**
+	 * Kunde durch Kundennummer auswählen
+	 */
+	private static void kundeByNummer() {
+		int nummer = Integer.parseInt(scan.nextLine());
+
+		Kunden kunde = null;
+
+		for (Kunden kunden : bank.getKundeList()) {
+			if (kunden.getKundenummer() == nummer) {
+				kunde = kunden;
+				break;
+			}
+		}
+
+		if (kunde == null || kunde.getKontos().isEmpty()) {
+			System.out.println("Kunde mit accountNummer not found");
+		} else {
+			System.out.println(kunde.toString());
+		}
+	}
+
+	/**
+	 * Kunde durch Name auswählen
+	 */
+	private static void kundeByName() {
+		String name = scan.nextLine();
+
+		Kunden kunde = null;
+
+		for (Kunden kunden : bank.getKundeList()) {
+			if (kunden.getName() == name) {
+				kunde = kunden;
+				break;
+			}
+		}
+
+		if (kunde == null || kunde.getKontos().isEmpty()) {
+			System.out.println("No client with kontos for this account number");
+		} else {
+			System.out.println(kunde.toString());
+		}
+	}
+
+	/**
+	 * Auswahl der Konten durch IBAn
+	 */
+	private static void kontoByIban() {
+		String iban = scan.nextLine();
+
+		Konto konto = null;
+
+		for (Kunden kunden : bank.getKundeList()) {
+			for (Konto kont : kunden.getKontos()) {
+				if (kont.getiBan().equalsIgnoreCase(iban)) {
+					konto = kont;
+					break;
+				}
+			}
+		}
+
+		if (konto == null) {
+			System.out.println("No konto for iban found");
+		} else {
+			System.out.println(konto.toString());
+		}
 	}
 
 }
