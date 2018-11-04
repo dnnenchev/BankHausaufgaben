@@ -1,43 +1,36 @@
 package Nenchev_s0566298_Kontoverwaltung;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * 
- * @author Damyan Nenchev ,Matrikelnummer: S0566298, E-Mail
- *         s0566298@htw-berlin.de
+ * @author Damyan Nenchev ,Matrikelnummer: S0566298, <s0566298@htw-berlin.de>
  *
  */
-public class Kunden {
+public abstract class Kunden {
 	/**
 	 * Atributte
 	 */
 	private int kundenummer;
 	private long telefonnummer;
-	private String vorname;
-	private String nachname;
+
 	private String guburtsdatum;
 	private String adresse;
 	private String eMailAdresse;
-
-	private Anrede anrede;
 
 	private ArrayList<Konto> kontos;
 
 	/**
 	 * @param kundenummer
-	 * @param vorname
-	 * @param nachname
 	 * @param guburtsdatum
 	 * @param adresse
 	 * @param telefonnummer
 	 * @param eMailAdresse
 	 */
-	public Kunden(int kundenummer, String vorname, String nachname, String guburtsdatum, String adresse,
-			long telefonnummer, String eMailAdresse) {
+	public Kunden(int kundenummer, String guburtsdatum, String adresse, long telefonnummer, String eMailAdresse) {
 		this.kundenummer = kundenummer;
-		this.vorname = vorname;
-		this.nachname = nachname;
 		this.guburtsdatum = guburtsdatum;
 		this.adresse = adresse;
 		this.telefonnummer = telefonnummer;
@@ -45,12 +38,19 @@ public class Kunden {
 		this.kontos = new ArrayList<>();
 	}
 
+	// Abstracte Methode
+	public abstract String getName();
+
 	/**
 	 * 
 	 * @param Konto
 	 */
 	public void addKonto(Konto kontos) {
 		this.kontos.add(kontos);
+	}
+
+	public ArrayList<Konto> getKontos() {
+		return this.kontos;
 	}
 
 	/**
@@ -67,38 +67,6 @@ public class Kunden {
 	 */
 	public void setKundenummer(int kundenummer) {
 		this.kundenummer = kundenummer;
-	}
-
-	/**
-	 * @return Vorname
-	 */
-	public String getVorname() {
-		return vorname;
-	}
-
-	/**
-	 * @param Set
-	 *            Vorname
-	 * 
-	 */
-	public void setVorname(String vorname) {
-		this.vorname = vorname;
-	}
-
-	/**
-	 * @return Nachname
-	 */
-	public String getNachname() {
-		return nachname;
-	}
-
-	/**
-	 * @param Set
-	 *            Nachname
-	 * 
-	 */
-	public void setNachname(String nachname) {
-		this.nachname = nachname;
 	}
 
 	/**
@@ -164,20 +132,13 @@ public class Kunden {
 		this.eMailAdresse = eMailAdresse;
 	}
 
-	/**
-	 * @return Anrede
-	 */
-	public Anrede getAnrede() {
-		return anrede;
-	}
+	public void sortKontos() {
+		Collections.sort(kontos, new Comparator<Konto>() {
 
-	/**
-	 * @param Set
-	 *            Anrede
-	 * 
-	 */
-	public void setAnrede(Anrede anrede) {
-		this.anrede = anrede;
+			public int compare(Konto konto1, Konto konto2) {
+				return konto1.getKontoStand() < konto2.getKontoStand() ? 1 : 0;
+			}
+		});
 	}
 
 	/*
@@ -187,9 +148,8 @@ public class Kunden {
 	 */
 	@Override
 	public String toString() {
-		return "\n" + "Kundennummer : " + " " + kundenummer + " \n" + "Anrede : " + " " + anrede + "\n " + "Vorname : "
-				+ vorname + "\n " + "Nachname : " + " " + nachname + "\n " + "Geburtsdatum : " + " " + guburtsdatum
-				+ "\n " + "Adresse : " + " " + adresse + " \n" + "Telefonnummer : " + " " + telefonnummer + "\n "
+		return "\n" + "Kundennummer : " + " " + kundenummer + " \n" + "Geburtsdatum : " + " " + guburtsdatum + "\n "
+				+ "Adresse : " + " " + adresse + " \n" + "Telefonnummer : " + " " + telefonnummer + "\n "
 				+ "E-Mail Adresse:  " + " " + eMailAdresse + "\n" + this.kontos.toString() + "\n";
 	}
 

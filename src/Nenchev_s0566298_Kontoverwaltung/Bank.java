@@ -114,4 +114,13 @@ public class Bank {
 		this.adresse = adresse;
 	}
 
+	/**
+	 * @param Set
+	 *            Adresse
+	 * 
+	 */
+	public ArrayList<Kunden> getKundeList() {
+		return this.kunde;
+	}
+
 }
