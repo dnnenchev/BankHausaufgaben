@@ -35,6 +35,7 @@ public class PrivatKunden extends Kunden {
 		this.nachname = nachname;
 		this.anrede = anrede;
 	}
+
 	// Überschreibene Methode
 
 	@Override

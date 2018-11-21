@@ -1,8 +1,13 @@
 package Nenchev_s0566298_Kontoverwaltung;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * 
@@ -20,7 +25,7 @@ public abstract class Kunden {
 	private String adresse;
 	private String eMailAdresse;
 
-	private ArrayList<Konto> kontos;
+	private HashMap<String, Konto> kontos;
 
 	/**
 	 * @param kundenummer
@@ -35,7 +40,7 @@ public abstract class Kunden {
 		this.adresse = adresse;
 		this.telefonnummer = telefonnummer;
 		this.eMailAdresse = eMailAdresse;
-		this.kontos = new ArrayList<>();
+		this.kontos = new HashMap<>();
 	}
 
 	// Abstracte Methode
@@ -45,11 +50,13 @@ public abstract class Kunden {
 	 * 
 	 * @param Konto
 	 */
-	public void addKonto(Konto kontos) {
-		this.kontos.add(kontos);
+	public void addKonto(Konto konto) {
+		if (!kontos.containsKey(konto.getiBan())) {
+			kontos.put(konto.getiBan(), konto);
+		}
 	}
 
-	public ArrayList<Konto> getKontos() {
+	public Map<String, Konto> getKontos() {
 		return this.kontos;
 	}
 
@@ -133,12 +140,26 @@ public abstract class Kunden {
 	}
 
 	public void sortKontos() {
-		Collections.sort(kontos, new Comparator<Konto>() {
+		kontos = sortByComparator(kontos);
+	}
 
-			public int compare(Konto konto1, Konto konto2) {
-				return konto1.getKontoStand() < konto2.getKontoStand() ? 1 : 0;
+	private HashMap<String, Konto> sortByComparator(HashMap<String, Konto> unsortMap) {
+
+		List<Entry<String, Konto>> list = new LinkedList<>(unsortMap.entrySet());
+
+		Collections.sort(list, new Comparator<Entry<String, Konto>>() {
+			public int compare(Entry<String, Konto> entry1, Entry<String, Konto> entry2) {
+				return entry1.getValue().getKontoStand() < entry2.getValue().getKontoStand() ? 1 : 0;
 			}
 		});
+
+		HashMap<String, Konto> sortedMap = new LinkedHashMap<String, Konto>();
+
+		for (Entry<String, Konto> entry : list) {
+			sortedMap.put(entry.getKey(), entry.getValue());
+		}
+
+		return sortedMap;
 	}
 
 	/*
