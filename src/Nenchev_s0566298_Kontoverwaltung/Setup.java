@@ -18,6 +18,8 @@ public class Setup {
 
 	private static Scanner scan;
 
+	private static String FILE_PATH = System.getProperty("user.dir") + "\\dateiname.xlsx";
+
 	public static void initialSetup(Scanner scanner) {
 		scan = scanner;
 
@@ -33,17 +35,20 @@ public class Setup {
 	 *            Start Menü
 	 */
 	public static void showMenu() {
-		System.out.println("1. Privatkunde anlegen");
-		System.out.println("2. Geschäftskunde anlegen");
-		System.out.println("3. Konto anlegen und Kundennummer zuordnen");
-		System.out.println("4. Kunde mit Konten anzeigen (Auswahl durch)");
-		System.out.println("5. Kunde mit Konten anzeigen (Auswahl durch Name)");
-		System.out.println("6. Konto anzeigen (Auswahl durch IBAN)");
-		System.out.println("7. Alle Kunden sortieren nach aufsteigender Kundenummer anzeigen");
+		System.out.println("1.  Privatkunde anlegen");
+		System.out.println("2.  Geschäftskunde anlegen");
+		System.out.println("3.  Konto anlegen und Kundennummer zuordnen");
+		System.out.println("4.  Kunde mit Konten anzeigen (Auswahl durch)");
+		System.out.println("5.  Kunde mit Konten anzeigen (Auswahl durch Name)");
+		System.out.println("6.  Konto anzeigen (Auswahl durch IBAN)");
+		System.out.println("7.  Alle Kunden sortieren nach aufsteigender Kundenummer anzeigen");
 		System.out.println(
-				"8. Alle Kunden sortieren nach aufsteigender Nachname und nachraging nach aufsteigenden Vornamen anzeigen ");
-		System.out.println("9. Alle Konten unsortiert anzeigen");
-		System.out.println("10. Beenden");
+				"8.  Alle Kunden sortieren nach aufsteigender Nachname und nachraging nach aufsteigenden Vornamen anzeigen ");
+		System.out.println("9.  Alle Konten unsortiert anzeigen");
+		System.out.println("10. Bankdaten spechern");
+		System.out.println("11. Bankdaten laden");
+		System.out.println("12. Kunden nach Namen sortiert als CSV- Datei exportieren");
+		System.out.println("13. Beenden");
 	}
 
 	/**
@@ -55,32 +60,57 @@ public class Setup {
 		switch (option) {
 		case 1: {
 			addPrivatKunde();
+			break;
 		}
 		case 2: {
 			addFirmenKunde();
+			break;
 		}
 		case 3: {
 			addKontoAndSort();
+			break;
 		}
 		case 4: {
 			kundeByNummer();
+			break;
 		}
 		case 5: {
 			kundeByName();
+			break;
 		}
 		case 6: {
 			kontoByIban();
+			break;
 		}
 		case 7: {
 			sortKundeNummer();
+			break;
 		}
 
 		case 8: {
 			sortiereNachNamen();
+			break;
 		}
 
 		case 9: {
 			unsortierendetKonten();
+			break;
+		}
+		case 10: {
+			BankOutput.writeBank("dateiname", bank);
+			break;
+
+		}
+		case 11: {
+			BankOutput.readBank(FILE_PATH);
+			break;
+		}
+		case 12: {
+			BankOutput.writeKunden(FILE_PATH, bank);
+			break;
+		}
+		case 13: {
+			System.out.println("Beenden");
 		}
 
 		}
@@ -109,8 +139,7 @@ public class Setup {
 	 *            Geschäftskunden hinzufügen
 	 */
 	private static void addFirmenKunde() {
-		// kato dobavqne na private kunde, samo che obekta ot tip class
-		// new GeschaeftsKunden
+
 		int kundenNummer = Integer.parseInt(scan.nextLine());
 		String firmenName = scan.nextLine();
 		String geburdstadum = scan.nextLine();
@@ -219,6 +248,11 @@ public class Setup {
 	private static void sortKundeNummer() {
 		ArrayList<Kunden> sortedKunden = bank.getKundeList();
 
+		if (sortedKunden.isEmpty()) {
+			System.out.println("Keine aktuelle Kontos!\n");
+			return;
+		}
+
 		sortedKunden.sort(new Comparator<Kunden>() {
 
 			@Override
@@ -238,7 +272,12 @@ public class Setup {
 	 *            Namer der Kunde aufsteigend und nachranging sortieren
 	 */
 	private static void sortiereNachNamen() {
-		ArrayList<Kunden> sortedKunden = new ArrayList<>();
+		ArrayList<Kunden> sortedKunden = bank.getKundeList();
+
+		if (sortedKunden.isEmpty()) {
+			System.out.println("Keine aktuelle Kontos!\n");
+			return;
+		}
 
 		sortedKunden.sort(new Comparator<Kunden>() {
 
@@ -260,6 +299,11 @@ public class Setup {
 	 */
 	private static void unsortierendetKonten() {
 		ArrayList<Kunden> shuffledKunden = bank.getKundeList();
+
+		if (shuffledKunden.isEmpty()) {
+			System.out.println("Keine aktuelle Kontos!\n");
+			return;
+		}
 
 		Collections.shuffle(shuffledKunden);
 

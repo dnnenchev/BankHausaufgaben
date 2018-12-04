@@ -143,6 +143,8 @@ public abstract class Kunden {
 		kontos = sortByComparator(kontos);
 	}
 
+	public abstract String getKundenTyp();
+
 	private HashMap<String, Konto> sortByComparator(HashMap<String, Konto> unsortMap) {
 
 		List<Entry<String, Konto>> list = new LinkedList<>(unsortMap.entrySet());

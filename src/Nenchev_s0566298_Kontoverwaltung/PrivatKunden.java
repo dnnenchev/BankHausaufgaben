@@ -41,6 +41,10 @@ public class PrivatKunden extends Kunden {
 	@Override
 	public String getName() {
 		return this.vorname + " " + this.nachname;
+
 	}
 
+	public String getKundenTyp() {
+		return "Privatkunde";
+	}
 }

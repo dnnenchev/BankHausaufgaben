@@ -23,17 +23,18 @@ public class Starter {
 		/**
 		 * Falsche Option ausgewählt aus der Menü
 		 */
+
 		do {
 			Setup.showMenu();
 
 			option = Integer.parseInt(scan.nextLine());
 
-			if (option < 1 || option > 7) {
+			if (option < 1 || option > 14) {
 				System.out.println("\nInvalid option\n");
 			} else {
 				Setup.handleOption(option);
 			}
-		} while (option != 10);
+		} while (option != 14);
 
 	}
 }

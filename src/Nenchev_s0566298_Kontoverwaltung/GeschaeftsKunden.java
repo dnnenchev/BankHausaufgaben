@@ -35,4 +35,8 @@ public class GeschaeftsKunden extends Kunden {
 		return this.firmenName;
 	}
 
+	public String getKundenTyp() {
+		return "Geschäftskunde";
+
+	}
 }
