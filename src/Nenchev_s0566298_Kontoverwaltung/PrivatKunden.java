@@ -36,8 +36,6 @@ public class PrivatKunden extends Kunden {
 		this.anrede = anrede;
 	}
 
-	// Überschreibene Methode
-
 	@Override
 	public String getName() {
 		return this.vorname + " " + this.nachname;

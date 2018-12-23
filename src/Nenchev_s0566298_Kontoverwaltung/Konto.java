@@ -1,16 +1,28 @@
 package Nenchev_s0566298_Kontoverwaltung;
 
+import java.util.Observable;
+
 /**
  * 
  * @author Damyan Nenchev ,Matrikelnummer: S0566298, <s0566298@htw-berlin.de>
  *
  */
-public class Konto {
+public class Konto extends Observable {
+
+	public enum OperationType {
+		Unknown, Einzahlung, Auszahlung
+	}
+
 	/**
 	 * Atributte
 	 */
 	private String iBan;
+
 	private double kontoStand;
+
+	private double mLastOperationAmount;
+
+	private OperationType mIsLastOperationType;
 
 	/**
 	 * @param iBan
@@ -19,6 +31,8 @@ public class Konto {
 	public Konto(String iBan, double kontoStand) {
 		this.iBan = iBan;
 		this.kontoStand = kontoStand;
+		this.mLastOperationAmount = 0;
+		this.mIsLastOperationType = OperationType.Unknown;
 	}
 
 	/**
@@ -45,12 +59,45 @@ public class Konto {
 	}
 
 	/**
+	 * 
+	 * @return getLastOperationAmount gibt zurueck dem Betrag, den zuletzt
+	 *         Ein/Ausgezahlt wurde
+	 */
+	public double getLastOperationAmount() {
+		return mLastOperationAmount;
+	}
+
+	public OperationType getLastOperationType() {
+		return mIsLastOperationType;
+	}
+
+	/**
 	 * @param Set
 	 *            Kontostand
 	 * 
 	 */
 	public void setKontoStand(double kontoStand) {
 		this.kontoStand = kontoStand;
+	}
+
+	public void geldEinzahlen(double betrag) {
+		mIsLastOperationType = OperationType.Einzahlung;
+
+		mLastOperationAmount = betrag;
+		this.kontoStand += betrag;
+
+		setChanged();
+		notifyObservers(betrag >= 10000);
+	}
+
+	public void geldAuszahlhne(double betrag) {
+		mIsLastOperationType = OperationType.Auszahlung;
+
+		mLastOperationAmount = betrag;
+		this.kontoStand -= betrag;
+
+		setChanged();
+		notifyObservers(betrag >= 10000);
 	}
 
 	/*

@@ -14,7 +14,6 @@ public class Starter {
 	private static Scanner scan;
 
 	public static void main(String[] args) {
-
 		scan = new Scanner(System.in);
 
 		Setup.initialSetup(scan);
@@ -29,12 +28,12 @@ public class Starter {
 
 			option = Integer.parseInt(scan.nextLine());
 
-			if (option < 1 || option > 14) {
+			if (option < 1 || option > 16) {
 				System.out.println("\nInvalid option\n");
 			} else {
 				Setup.handleOption(option);
 			}
-		} while (option != 14);
+		} while (option != 16);
 
 	}
 }

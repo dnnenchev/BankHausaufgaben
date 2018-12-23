@@ -5,6 +5,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Scanner;
 
+import LoggerStrategien.Logger;
+import LoggerStrategien.StrategyCSV;
+import LoggerStrategien.StrategyConsole;
+import rechtsabteilung.Bankangestellten;
+import rechtsabteilung.Vorstand;
+
 /**
  * 
  * @author Damyan Nenchev, Matrikelnummer: s0566298, <s0566298@htw-berlin.de>
@@ -48,7 +54,10 @@ public class Setup {
 		System.out.println("10. Bankdaten spechern");
 		System.out.println("11. Bankdaten laden");
 		System.out.println("12. Kunden nach Namen sortiert als CSV- Datei exportieren");
-		System.out.println("13. Beenden");
+		System.out.println("13. Geld einzahlen");
+		System.out.println("14. Geld auzahlen");
+		System.out.println("15. Log- Strategie wählen");
+		System.out.println("16. Beenden");
 	}
 
 	/**
@@ -109,7 +118,24 @@ public class Setup {
 			BankOutput.writeKunden(FILE_PATH, bank);
 			break;
 		}
+
 		case 13: {
+			geldEinzahlen();
+			break;
+		}
+
+		case 14: {
+			geldAuszahlen();
+			break;
+		}
+
+		case 15: {
+			logStrategien();
+			break;
+
+		}
+
+		case 16: {
 			System.out.println("Beenden");
 		}
 
@@ -167,7 +193,17 @@ public class Setup {
 		}
 
 		if (kunde != null) {
-			kunde.addKonto(new Konto(scan.nextLine(), Double.parseDouble(scan.nextLine())));
+			Konto konto = new Konto(scan.nextLine(), Double.parseDouble(scan.nextLine()));
+
+			for (Vorstand vorstand : bank.getVorstandList()) {
+				konto.addObserver(vorstand);
+			}
+
+			for (Bankangestellten bankangestellten : bank.getBankangestelltenList()) {
+				konto.addObserver(bankangestellten);
+			}
+
+			kunde.addKonto(konto);
 			kunde.sortKontos();
 		}
 	}
@@ -309,6 +345,89 @@ public class Setup {
 
 		for (Kunden kunden : shuffledKunden) {
 			System.out.println(kunden.toString());
+		}
+	}
+
+	/**
+	 * @param geldEinzahlen
+	 *            Geld einzahlen
+	 */
+	private static void geldEinzahlen() {
+		System.out.print("Enter IBAN: ");
+
+		Konto konto = getKontoByIban(scan.nextLine());
+
+		if (konto == null) {
+			System.out.println("No konto for iban found");
+			return;
+		}
+
+		double betrag = Double.parseDouble(scan.nextLine());
+
+		konto.geldEinzahlen(betrag);
+	}
+
+	/**
+	 * @param geldAuszahlen
+	 *            Geld aus dem Konto auszahlen
+	 */
+	private static void geldAuszahlen() {
+		System.out.print("Enter IBAN: ");
+
+		Konto konto = getKontoByIban(scan.nextLine());
+
+		if (konto == null) {
+			System.out.println("No konto for iban found");
+			return;
+		}
+
+		double betrag = Double.parseDouble(scan.nextLine());
+
+		konto.geldAuszahlhne(betrag);
+	}
+
+	/**
+	 * 
+	 * @param iban
+	 * @return
+	 */
+	private static Konto getKontoByIban(String iban) {
+		Konto konto = null;
+
+		for (Kunden kunden : bank.getKundeList()) {
+			if (kunden.getKontos().containsKey(iban)) {
+				konto = kunden.getKontos().get(iban);
+				break;
+			}
+		}
+
+		return konto;
+	}
+
+	/**
+	 * Strategiewechsel
+	 */
+	private static void logStrategien() {
+		System.out.println("Waehle Strategy:");
+		System.out.println("1. Console");
+		System.out.println("2. CSV");
+
+		int strategy = Integer.parseInt(scan.nextLine());
+
+		if (strategy == 1) {
+			Logger.getInstance().setStrategy(new StrategyConsole());
+			return;
+		}
+
+		if (strategy == 2) {
+			Logger logger = Logger.getInstance();
+
+			if (logger.getFileName() == null) {
+				System.out.print("Enter filename: ");
+				logger.setFileName(scan.nextLine());
+			}
+
+			logger.setStrategy(new StrategyCSV());
 		}
 	}
 
